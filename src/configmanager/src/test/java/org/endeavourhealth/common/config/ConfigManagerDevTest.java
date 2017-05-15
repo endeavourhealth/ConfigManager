@@ -4,16 +4,6 @@ import org.junit.Assert;
 import org.junit.Test;
 
 public class ConfigManagerDevTest {
-	@Test
-	public void getConfiguration() throws Exception {
-		ConfigManager.Initialize("global");
-		String result = ConfigManager.getConfiguration("coding");
-		Assert.assertEquals("{\r\n" +
-				"   \"url\" : \"jdbc:postgresql://localhost:5432/coding\",\r\n" +
-				"   \"username\" : \"postgres\",\r\n" +
-				"   \"password\" : \"\"\r\n" +
-				"}", result);
-	}
 
 	@Test
 	public void testTimeout() throws Exception {
