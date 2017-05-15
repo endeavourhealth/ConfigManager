@@ -12,7 +12,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven-compiler-plugin.version>3.1</maven-compiler-plugin.version>
 
-        <endeavour-common.version>2.77</endeavour-common.version>
+        <endeavour-common.version>2.78</endeavour-common.version>
         <hibernate.version>5.2.5.Final</hibernate.version>
         <hikari.version>2.5.1</hikari.version>
         <junit.version>4.12</junit.version>
