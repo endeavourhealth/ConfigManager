@@ -35,8 +35,6 @@ public class JdbcLayer implements DatabaseLayer {
 				if (rs.next())
 					data = rs.getString("config_data");
 
-				statement.close();
-
 				return data;
 			}
 		} catch (Exception e) {
@@ -61,7 +59,7 @@ public class JdbcLayer implements DatabaseLayer {
 
 				//changed to return whether a row was updated
 				int rows = statement.executeUpdate();
-				statement.close();
+
 				return rows > 0;
 				//statement.execute();
 			}
