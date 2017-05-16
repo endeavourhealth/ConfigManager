@@ -19,9 +19,9 @@ INSERT INTO config
 VALUES
 ('enterprise', 'admin_database', '{
   "driverClass" : "org.postgresql.Driver",
-	"username" : "postgres",
-	"password" : "",
-	"url"	: "jdbc:postgresql://localhost:5432/enterprise_admin",
+	"enterprise_username" : "postgres",
+	"enterprise_password" : "",
+	"enterprise_url"	: "jdbc:postgresql://localhost:5432/enterprise_admin",
 	"pseudonymised": false
 }' );
 
@@ -46,9 +46,9 @@ INSERT INTO config
 VALUES
 ('enterprise', 'admin_database', '{
   "driverClass" : "com.mysql.jdbc.Driver",
-	"username" : "root",
-	"password" : "",
-	"url"	: "jdbc:mysql://localhost:3306/enterprise_admin?useSSL=false",
+	"enterprise_username" : "root",
+	"enterprise_password" : "",
+	"enterprise_url"	: "jdbc:mysql://localhost:3306/enterprise_admin?useSSL=false",
 	"pseudonymised": false
 }' );
 
