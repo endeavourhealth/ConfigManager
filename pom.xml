@@ -29,7 +29,7 @@
 
     <modules>
         <module>src/configmanager</module>
-        <module>src/configmanager-database</module>
+        <module>database/config-database</module>
     </modules>
 
     <build>
