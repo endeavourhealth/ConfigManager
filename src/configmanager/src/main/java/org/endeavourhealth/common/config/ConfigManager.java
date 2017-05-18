@@ -3,6 +3,7 @@ package org.endeavourhealth.common.config;
 import ch.qos.logback.classic.LoggerContext;
 import ch.qos.logback.classic.joran.JoranConfigurator;
 import com.fasterxml.jackson.databind.JsonNode;
+import org.endeavourhealth.common.cache.CacheManager;
 import org.endeavourhealth.common.cache.ObjectMapperPool;
 import org.endeavourhealth.common.config.db.DatabaseLayer;
 import org.endeavourhealth.common.config.db.JdbcLayer;
@@ -12,8 +13,6 @@ import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Properties;
 
 public class ConfigManager {
@@ -24,7 +23,7 @@ public class ConfigManager {
 
 	static DatabaseLayer _databaseLayer;
 	private static String _appId;
-	private static Map<String, ConfigCacheEntry> _configCache = new HashMap<>();
+	private static ConfigCache _configCache;
 
 	static { //runs when the main class is loaded.
 		LOG.info("Config manager created");
@@ -32,6 +31,8 @@ public class ConfigManager {
 		LOG.info("Jboss logging switched to slf4j");
 
 		_databaseLayer = new JdbcLayer();
+		_configCache = new ConfigCache();
+		CacheManager.registerCache(_configCache);
 	}
 
 	public synchronized static void Initialize(String appId) throws ConfigManagerException {
@@ -80,11 +81,12 @@ public class ConfigManager {
 
 	public synchronized static String getConfiguration(String configId, String appIdParam) {
 		// Try to get from cache
-		ConfigCacheEntry cacheEntry = _configCache.get(configId + appIdParam);
+		ConfigCacheEntry cacheEntry = _configCache.get(configId, appIdParam);
 		if (cacheEntry!=null && !cacheEntry.isExpired())
 			return cacheEntry.getConfigData();
 
-		cacheEntry = _configCache.get(configId + APP_GLOBAL);
+		// If no app specific result, look for a global setting
+		cacheEntry = _configCache.get(configId, APP_GLOBAL);
 		if (cacheEntry!=null && !cacheEntry.isExpired())
 			return cacheEntry.getConfigData();
 
@@ -92,7 +94,7 @@ public class ConfigManager {
 		String data = _databaseLayer.getConfiguration(configId, appIdParam);
 		if (data != null) {
 			cacheEntry = new ConfigCacheEntry(data);
-			_configCache.put(configId + appIdParam, cacheEntry);
+			_configCache.put(configId, appIdParam, cacheEntry);
 			return data;
 		}
 
@@ -100,7 +102,7 @@ public class ConfigManager {
 		data = _databaseLayer.getConfiguration(configId, APP_GLOBAL);
 		if (data != null) {
 			cacheEntry = new ConfigCacheEntry(data);
-			_configCache.put(configId + APP_GLOBAL, cacheEntry);
+			_configCache.put(configId, APP_GLOBAL, cacheEntry);
 			return data;
 		}
 
