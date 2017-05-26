@@ -5,6 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.sql.*;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
@@ -67,6 +68,37 @@ public class JdbcLayer implements DatabaseLayer {
 		} catch (Exception e) {
 			LOG.error("Error setting configuration ["+configId+"] for application ["+appIdParam+"]", e);
 			return false;
+		}
+	}
+
+	@Override
+	public Map<String, String> getConfigurations(String appIdParam) {
+		try (Connection conn = getConnection()) {
+
+			String sql =
+					" select config_id, config_data" +
+							" from " +
+							"    config" +
+							" where app_id = ?";
+
+			try (PreparedStatement statement = conn.prepareStatement(sql)) {
+				statement.setString(1, appIdParam);
+				ResultSet rs = statement.executeQuery();
+
+				Map<String, String> ret = new HashMap<>();
+
+				while (rs.next()) {
+					String id = rs.getString("config_id");
+					String data = rs.getString("config_data");
+					ret.put(id, data);
+				}
+
+				return ret;
+			}
+
+		} catch (Exception e) {
+			LOG.error("Error getting configurations application [" + appIdParam + "]", e);
+			return null;
 		}
 	}
 

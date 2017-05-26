@@ -13,6 +13,8 @@ import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 
 public class ConfigManager {
@@ -117,6 +119,24 @@ public class ConfigManager {
 	public static JsonNode getConfigurationAsJson(String configId, String appIdParam) throws IOException {
 		String json = ConfigManager.getConfiguration(configId, appIdParam);
 		return ObjectMapperPool.getInstance().readTree(json);
+	}
+
+	public static Map<String, String> getConfigurations(String appIdParam) {
+		return _databaseLayer.getConfigurations(appIdParam);
+	}
+
+	public static Map<String, JsonNode> getConfigurationsAsJson(String appIdParam) throws IOException {
+		Map<String, String> map = getConfigurations(appIdParam);
+
+		Map<String, JsonNode> ret = new HashMap<>();
+
+		for (String configId: map.keySet()) {
+			String json = map.get(configId);
+			JsonNode jsonNode = ObjectMapperPool.getInstance().readTree(json);
+			ret.put(configId, jsonNode);
+		}
+
+		return ret;
 	}
 
 	public static void setConfiguration(String configId, String data) throws Exception {

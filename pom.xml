@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.endeavourhealth.configmanager</groupId>
     <artifactId>root</artifactId>
-    <version>1.06-SNAPSHOT</version>
+    <version>1.07-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <properties>

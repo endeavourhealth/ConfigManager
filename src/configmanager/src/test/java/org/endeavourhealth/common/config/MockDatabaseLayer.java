@@ -1,5 +1,7 @@
 package org.endeavourhealth.common.config;
 
+import java.util.Map;
+
 public class MockDatabaseLayer implements org.endeavourhealth.common.config.db.DatabaseLayer {
 	private String data;
 	@Override
@@ -16,5 +18,10 @@ public class MockDatabaseLayer implements org.endeavourhealth.common.config.db.D
 	public boolean setConfiguration(String configId, String appIdParam, String data) {
 		this.data = data;
 		return true;
+	}
+
+	@Override
+	public Map<String, String> getConfigurations(String appIdParam) {
+		return null;
 	}
 }
