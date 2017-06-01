@@ -1,12 +1,8 @@
 package org.endeavourhealth.common.config.models;
 
-import org.apache.commons.lang3.time.DateUtils;
-
 import java.util.Date;
 
 public class ConfigCacheEntry {
-	private static final int TIMEOUT = 1;
-
 	private String configData;
 	private Date createTime;
 
@@ -16,11 +12,11 @@ public class ConfigCacheEntry {
 		this.createTime = new Date();
 	}
 
-	public boolean isExpired() {
-		return new Date().getTime() > DateUtils.addMinutes(this.createTime, TIMEOUT).getTime();
+	public Date getCreateTime() {
+		return this.createTime;
 	}
 
 	public String getConfigData() {
-		return configData;
+		return this.configData;
 	}
 }

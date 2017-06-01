@@ -1,11 +1,13 @@
 package org.endeavourhealth.common.config;
 
+import org.endeavourhealth.common.config.dataAccess.DataAccessLayer;
+
 import java.util.Map;
 
-public class MockDatabaseLayer implements org.endeavourhealth.common.config.db.DatabaseLayer {
+public class MockDataAccessLayer implements DataAccessLayer {
 	private String data;
 	@Override
-	public void createDatabaseConnection() {
+	public void initialize() {
 
 	}
 

@@ -20,8 +20,9 @@ public class ConfigManagerDevTest {
 		final String INITIAL_DATA = "InitialData";
 		final String CHANGED_DATA = "ChangedData";
 
-		MockDatabaseLayer mockDb = new MockDatabaseLayer();
-		ConfigManager._databaseLayer = mockDb;
+		MockDataAccessLayer mockDb = new MockDataAccessLayer();
+		ConfigManager._dataAccessLayer = mockDb;
+		ConfigCache.TIMEOUT = 60;
 
 		// Test basic retrieval
 		mockDb.setConfiguration("test", "test", INITIAL_DATA);
@@ -33,8 +34,9 @@ public class ConfigManagerDevTest {
 		result = ConfigManager.getConfiguration("test", "test");
 		Assert.assertEquals(INITIAL_DATA, result);
 
+		ConfigCache.TIMEOUT = 0;
+
 		// Test Cache timeout (after timeout should be changed value);
-		Thread.sleep(1 * 60 * 1000);
 		result = ConfigManager.getConfiguration("test", "test");
 		Assert.assertEquals(CHANGED_DATA, result);
 	}

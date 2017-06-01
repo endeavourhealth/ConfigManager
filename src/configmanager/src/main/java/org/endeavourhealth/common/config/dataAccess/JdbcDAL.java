@@ -1,6 +1,5 @@
-package org.endeavourhealth.common.config.db;
+package org.endeavourhealth.common.config.dataAccess;
 
-import org.endeavourhealth.common.config.ConfigManagerEnvVars;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -9,11 +8,15 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
-public class JdbcLayer implements DatabaseLayer {
-	private static final Logger LOG = LoggerFactory.getLogger(JdbcLayer.class);
+public class JdbcDAL implements DataAccessLayer {
+	private static final String JDBC_CLASS_ENV_VAR = "CONFIG_JDBC_CLASS";
+	private static final String JDBC_URL_ENV_VAR = "CONFIG_JDBC_URL";
+	private static final String JDBC_USER_ENV_VAR = "CONFIG_JDBC_USERNAME";
+	private static final String JDBC_PASSWORD_ENV_VAR = "CONFIG_JDBC_PASSWORD";
+	private static final Logger LOG = LoggerFactory.getLogger(JdbcDAL.class);
 
 	@Override
-	public void createDatabaseConnection() {
+	public void initialize() {
 		// Do nothing - Connection created on demand
 	}
 
@@ -105,13 +108,13 @@ public class JdbcLayer implements DatabaseLayer {
 	private Connection getConnection() throws SQLException, ClassNotFoundException {
 		Map<String, String> envVars = System.getenv();
 
-		Class.forName(envVars.getOrDefault(ConfigManagerEnvVars.JDBC_CLASS_ENV_VAR, "org.postgresql.Driver"));
+		Class.forName(envVars.getOrDefault(JDBC_CLASS_ENV_VAR, "org.postgresql.Driver"));
 
 		Properties props = new Properties();
 
-		props.setProperty("user", envVars.getOrDefault(ConfigManagerEnvVars.JDBC_USER_ENV_VAR, "postgres"));
-		props.setProperty("password", envVars.getOrDefault(ConfigManagerEnvVars.JDBC_PASSWORD_ENV_VAR, ""));
+		props.setProperty("user", envVars.getOrDefault(JDBC_USER_ENV_VAR, "postgres"));
+		props.setProperty("password", envVars.getOrDefault(JDBC_PASSWORD_ENV_VAR, ""));
 
-		return DriverManager.getConnection(envVars.getOrDefault(ConfigManagerEnvVars.JDBC_URL_ENV_VAR, "jdbc:postgresql://localhost:5432/config"), props);
+		return DriverManager.getConnection(envVars.getOrDefault(JDBC_URL_ENV_VAR, "jdbc:postgresql://localhost:5432/config"), props);
 	}
 }

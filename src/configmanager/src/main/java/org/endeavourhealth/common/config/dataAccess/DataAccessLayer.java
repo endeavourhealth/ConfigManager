@@ -1,10 +1,10 @@
-package org.endeavourhealth.common.config.db;
+package org.endeavourhealth.common.config.dataAccess;
 
 import java.util.Map;
 
-public interface DatabaseLayer {
+public interface DataAccessLayer {
 
-    void createDatabaseConnection();
+    void initialize();
 
     String getConfiguration(String configId, String appIdParam);
 

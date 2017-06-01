@@ -5,8 +5,8 @@ import ch.qos.logback.classic.joran.JoranConfigurator;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.endeavourhealth.common.cache.CacheManager;
 import org.endeavourhealth.common.cache.ObjectMapperPool;
-import org.endeavourhealth.common.config.db.DatabaseLayer;
-import org.endeavourhealth.common.config.db.JdbcLayer;
+import org.endeavourhealth.common.config.dataAccess.DataAccessLayer;
+import org.endeavourhealth.common.config.dataAccess.JdbcDAL;
 import org.endeavourhealth.common.config.models.ConfigCacheEntry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,7 +23,7 @@ public class ConfigManager {
 	public static final String LOGBACK_CONFIG = "logback";
 	private static final String APP_GLOBAL = "global";
 
-	static DatabaseLayer _databaseLayer;
+	static DataAccessLayer _dataAccessLayer;
 	private static String _appId;
 	private static ConfigCache _configCache;
 
@@ -32,7 +32,7 @@ public class ConfigManager {
 		System.setProperty("org.jboss.logging.provider", "slf4j");
 		LOG.info("Jboss logging switched to slf4j");
 
-		_databaseLayer = new JdbcLayer();
+		_dataAccessLayer = new JdbcDAL();
 		_configCache = new ConfigCache();
 		CacheManager.registerCache(_configCache);
 	}
@@ -41,8 +41,8 @@ public class ConfigManager {
 		_appId = appId;
 
 		try {
-			LOG.info("Connecting to config db..");
-			createDatabaseConnection();
+			LOG.info("Initializing data access layer..");
+			_dataAccessLayer.initialize();
 			LOG.info("Initializing logback");
 			initializeLogback();
 		} catch (Exception e) {
@@ -84,16 +84,16 @@ public class ConfigManager {
 	public synchronized static String getConfiguration(String configId, String appIdParam) {
 		// Try to get from cache
 		ConfigCacheEntry cacheEntry = _configCache.get(configId, appIdParam);
-		if (cacheEntry!=null && !cacheEntry.isExpired())
+		if (cacheEntry!=null)
 			return cacheEntry.getConfigData();
 
 		// If no app specific result, look for a global setting
 		cacheEntry = _configCache.get(configId, APP_GLOBAL);
-		if (cacheEntry!=null && !cacheEntry.isExpired())
+		if (cacheEntry!=null)
 			return cacheEntry.getConfigData();
 
 		// Failed, now try DB
-		String data = _databaseLayer.getConfiguration(configId, appIdParam);
+		String data = _dataAccessLayer.getConfiguration(configId, appIdParam);
 		if (data != null) {
 			cacheEntry = new ConfigCacheEntry(data);
 			_configCache.put(configId, appIdParam, cacheEntry);
@@ -101,7 +101,7 @@ public class ConfigManager {
 		}
 
 		// If no app specific result, look for a global setting
-		data = _databaseLayer.getConfiguration(configId, APP_GLOBAL);
+		data = _dataAccessLayer.getConfiguration(configId, APP_GLOBAL);
 		if (data != null) {
 			cacheEntry = new ConfigCacheEntry(data);
 			_configCache.put(configId, APP_GLOBAL, cacheEntry);
@@ -122,7 +122,7 @@ public class ConfigManager {
 	}
 
 	public static Map<String, String> getConfigurations(String appIdParam) {
-		return _databaseLayer.getConfigurations(appIdParam);
+		return _dataAccessLayer.getConfigurations(appIdParam);
 	}
 
 	public static Map<String, JsonNode> getConfigurationsAsJson(String appIdParam) throws IOException {
@@ -150,7 +150,7 @@ public class ConfigManager {
 	}
 
 	public synchronized static boolean setConfiguration(String configId, String appIdParam, String data) {
-	    return _databaseLayer.setConfiguration(configId, appIdParam, data);
+	    return _dataAccessLayer.setConfiguration(configId, appIdParam, data);
 	}
 
 	private static String getStackTrace(Throwable throwable) {
@@ -158,10 +158,6 @@ public class ConfigManager {
 		final PrintWriter pw = new PrintWriter(sw, true);
 		throwable.printStackTrace(pw);
 		return sw.getBuffer().toString();
-	}
-
-	private static synchronized void createDatabaseConnection() {
-		_databaseLayer.createDatabaseConnection();
 	}
 
 	private static void initializeLogback() {
