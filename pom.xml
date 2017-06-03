@@ -3,15 +3,17 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.endeavourhealth.configmanager</groupId>
     <artifactId>root</artifactId>
-    <version>1.07-SNAPSHOT</version>
+    <version>1.08-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <properties>
         <java.version>1.8</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven-compiler-plugin.version>3.1</maven-compiler-plugin.version>
+        <maven-surefire-plugin.version>2.19.1</maven-surefire-plugin.version>
+        <maven-release-plugin.version>2.5.3</maven-release-plugin.version>
 
-        <endeavour-common.version>2.83-SNAPSHOT</endeavour-common.version>
+        <endeavour-cache.version>1.0-SNAPSHOT</endeavour-cache.version>
         <hibernate.version>5.2.5.Final</hibernate.version>
         <hikari.version>2.5.1</hikari.version>
         <junit.version>4.12</junit.version>
@@ -24,24 +26,38 @@
         <module>database/config-database</module>
     </modules>
 
+    <repositories>
+        <repository>
+            <snapshots />
+            <id>snapshots</id>
+            <name>libs-snapshot</name>
+            <url>http://maven.endeavourhealth.net:8081/artifactory/libs-snapshot</url>
+        </repository>
+    </repositories>
+
+    <distributionManagement>
+        <snapshotRepository>
+            <id>snapshots</id>
+            <name>maven.endeavourhealth.org-snapshots</name>
+            <url>http://maven.endeavourhealth.net:8081/artifactory/libs-snapshot-local</url>
+        </snapshotRepository>
+    </distributionManagement>
+
     <build>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.1</version>
+                <version>${maven-compiler-plugin.version}</version>
                 <configuration>
                     <source>${java.version}</source>
                     <target>${java.version}</target>
-                    <compilerArgument>-Xlint:all</compilerArgument>
-                    <showWarnings>true</showWarnings>
-                    <showDeprecation>true</showDeprecation>
                 </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.19.1</version>
+                <version>${maven-surefire-plugin.version}</version>
                 <configuration>
                     <excludes>
                         <exclude>**/*DevTest.java</exclude>
@@ -51,7 +67,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-release-plugin</artifactId>
-                <version>2.5.3</version>
+                <version>${maven-release-plugin.version}</version>
                 <configuration>
                     <autoVersionSubmodules>true</autoVersionSubmodules>
                 </configuration>
