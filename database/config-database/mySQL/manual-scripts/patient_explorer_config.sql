@@ -23,7 +23,7 @@ VALUES
 INSERT INTO config.config
 (app_id, config_id, config_data)
 VALUES
-('eds-patient-explorer', 'enterprise-lite-db', 'jdbc:mysql://<HOSTNAME>:3306/enterprise_data?user=<USERNAME>&password=<PASSWORD>');
+('eds-patient-explorer', 'enterprise-lite-db', 'jdbc:mysql://<HOSTNAME>:3306/enterprise_data?useSSL=false&user=<USERNAME>&password=<PASSWORD>');
 
 INSERT INTO config.config
 (app_id, config_id, config_data)
@@ -38,5 +38,5 @@ VALUES
     "password" : "<PASSWORD>",
     "ui-username" : "<USERNAME>",
     "ui-password" : "<PASSWORD>",
-    "url"    : "jdbc:mysql://<HOSTNAME>:3306/enterprise_data"
+    "url"    : "jdbc:mysql://<HOSTNAME>:3306/enterprise_data?useSSL=false"
 }');

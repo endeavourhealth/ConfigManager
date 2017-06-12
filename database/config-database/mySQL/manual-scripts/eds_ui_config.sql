@@ -28,7 +28,7 @@ INSERT INTO config.config
 (app_id, config_id, config_data)
 VALUES
 ('eds-ui', 'logbackDb','{
-   "url" : "jdbc:mysql://<HOSTNAME>:3306/logback",
+   "url" : "jdbc:mysql://<HOSTNAME>:3306/logback?useSSL=false",
    "username" : "<USERNAME>",
    "password" : "<PASSWORD>"
 }');
@@ -37,7 +37,7 @@ INSERT INTO config.config
 (app_id, config_id, config_data)
 VALUES
 ('eds-ui', 'OrganisationManagerDB','{
-   "url" : "jdbc:mysql://<HOSTNAME>:3306/OrganisationManager",
+   "url" : "jdbc:mysql://<HOSTNAME>:3306/OrganisationManager?useSSL=false",
    "username" : "<USERNAME>",
    "password" : "<PASSWORD>"
 }');

@@ -1,0 +1,222 @@
+-- Run a Find & Replace on <USERNAME> and <PASSWORD> then execute the script
+-- Replace <HOSTNAME> values accordingly
+
+-- eds-ui
+UPDATE config.config
+SET
+  config_data = '{
+   "url" : "jdbc:mysql://<HOSTNAME>:3306/logback?useSSL=false",
+   "username" : "<USERNAME>",
+   "password" : "<PASSWORD>"
+}'
+WHERE app_id = 'eds-ui' AND config_id = 'logbackDb';
+
+UPDATE config.config
+SET
+  config_data = '{
+   "url" : "jdbc:mysql://<HOSTNAME>:3306/OrganisationManager?useSSL=false",
+   "username" : "<USERNAME>",
+   "password" : "<PASSWORD>"
+}'
+WHERE app_id = 'eds-ui' AND config_id = 'OrganisationManagerDB';
+
+
+-- patient-explorer
+UPDATE config.config
+SET
+  config_data = 'jdbc:mysql://<HOSTNAME>:3306/enterprise_data?useSSL=false&user=<USERNAME>&password=<PASSWORD>'
+WHERE app_id = 'eds-patient-explorer' AND config_id = 'enterprise-lite-db';
+
+UPDATE config.config
+SET
+  config_data = '{
+    "username" : "<USERNAME>",
+    "password" : "<PASSWORD>",
+    "ui-username" : "<USERNAME>",
+    "ui-password" : "<PASSWORD>",
+    "url"    : "jdbc:mysql://<HOSTNAME>:3306/enterprise_data?useSSL=false"
+}'
+WHERE app_id = 'eds-patient-explorer' AND config_id = 'enterprise-lite';
+
+
+-- enterprise
+UPDATE config.config
+SET
+  config_data = '{
+  "driverClass" : "com.mysql.cj.jdbc.Driver",
+	"username" : "<USERNAME>",
+	"password" : "<PASSWORD>",
+	"url"	: "jdbc:mysql://<HOSTNAME>:3306/enterprise_admin?useSSL=false",
+	"pseudonymised": false
+}'
+WHERE app_id = 'enterprise' AND config_id = 'admin_database';
+
+UPDATE config.config
+SET
+  config_data = '{
+  "driverClass" : "com.mysql.cj.jdbc.Driver",
+	"username" : "<USERNAME>",
+	"password" : "<PASSWORD>",
+	"url"	: "jdbc:mysql://<HOSTNAME>:3306/enterprise_data_pseudonymised?useSSL=false",
+	"pseudonymised": false
+}'
+WHERE app_id = 'enterprise' AND config_id = 'patient_database';
+
+UPDATE config.config
+SET
+  config_data = '{
+	"driverClass" : "com.mysql.cj.jdbc.Driver",
+	"enterprise_username": "<USERNAME>",
+	"enterprise_password": "<PASSWORD>",
+	"enterprise_url": "jdbc:mysql://<HOSTNAME>:3306/enterprise_data_pseudonymised?useSSL=false",
+	"pseudonymised": true,
+	"salt": "<SALT>",
+	"transform_url": "jdbc:mysql://<HOSTNAME>:3306/<TRANSFORM_DB>",
+	"transform_username": "<USERNAME>",
+	"transform_password": "<PASSWORD>"
+}'
+WHERE app_id = 'enterprise' AND config_id = '<SPECIFIC_ENTERPRISE>';
+
+
+-- global
+UPDATE config.config
+SET
+  config_data = '<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+  <appender name="stdout" class="ch.qos.logback.core.ConsoleAppender">
+    <encoder>
+      <pattern>%d{dd MMM HH:mm:ss.SSS} [%thread] %-5level %logger{10}:%-3line - %msg%n
+      </pattern>
+    </encoder>
+  </appender>
+
+  <appender name="db" class="ch.qos.logback.classic.db.DBAppender">
+    <!--<connectionSource class="ch.qos.logback.core.db.DriverManagerConnectionSource">-->
+    <connectionSource class="org.endeavourhealth.common.config.LogbackPooledConnectionSource">
+      <driverClass>com.mysql.cj.jdbc.Driver</driverClass>
+      <url>jdbc:mysql://<HOSTNAME>:3306/logback?useSSL=false</url>
+      <user><USERNAME></user>
+      <password><PASSWORD></password>
+    </connectionSource>
+  </appender>
+
+  <!-- wrap the DB appender in an async one, that means it won''t block when logging to the DB -->
+  <appender name="db_async" class="ch.qos.logback.classic.AsyncAppender">
+    <appender-ref ref="db" />
+    <discardingThreshold>0</discardingThreshold>
+    <includeCallerData>true</includeCallerData>
+  </appender>
+
+  <!-- file logging uses this element to name log files using the time-->
+  <timestamp key="bySecond" datePattern="yyyyMMdd''T''HHmmss"/>
+
+  <!-- file logging uses this element to locate the log files in a folder using a java system property-->
+  <property scope="context" name="LOGBACK_FOLDER" value="${location.of.the.log.folder}" />
+
+  <!--
+  <appender name="file" class="ch.qos.logback.core.FileAppender">
+    <file>/var/log/${LOGBACK_FOLDER}/log-${bySecond}.txt</file>
+    <encoder>
+      <pattern>%d{dd MMM HH:mm:ss.SSS} [%thread] %-5level %logger{10}:%-3line - %msg%n
+      </pattern>
+    </encoder>
+  </appender>
+  -->
+
+  <!--================================-->
+  <!--logging settings for development-->
+  <!--================================-->
+
+  <!-- only want ERRORs from these packages -->
+  <logger name="ch.qos.logback" level="ERROR"/>
+  <logger name="com.mchange" level="ERROR"/>
+  <logger name="com.datastax" level="ERROR"/>
+  <logger name="org.hibernate" level="ERROR"/>
+  <logger name="io.netty" level="ERROR"/>
+  <logger name="com.zaxxer" level="WARN"/>
+
+  <!-- enable TRACE logging for Endeavour code -->
+  <logger name="org.endeavourhealth" level="TRACE"/>
+
+  <!-- only log to stdout with INFO level -->
+  <root level="INFO">
+    <appender-ref ref="stdout" />
+    <appender-ref ref="db_async" />
+    <!--appender-ref ref="file" /-->
+  </root>
+
+  <!-- specify a shutdown hook for logging, so all loggers are flushed before app exit -->
+  <shutdownHook class="ch.qos.logback.core.hook.DelayingShutdownHook">
+	<!-- 8-Feb-2017 Jonny R Added delay to ensure we capture log messages during shutdown -->
+  	<delay>5000</delay>
+  </shutdownHook>
+
+</configuration>'
+WHERE app_id = 'global' AND config_id = 'logback';
+
+
+UPDATE config.config
+SET
+  config_data = '{
+   "url" : jdbc:mysql://<HOSTNAME>:3306/coding?useSSL=false",
+   "username" : "<USERNAME>",
+   "password" : "<PASSWORD>"
+}'
+WHERE app_id = 'global' AND config_id = 'coding';
+
+UPDATE config.config
+SET
+  config_data = '{
+   "url" : "jdbc:mysql://<HOSTNAME>:3306/reference?useSSL=false",
+   "username" : "<USERNAME>",
+   "password" : "<PASSWORD>"
+}'
+WHERE app_id = 'global' AND config_id = 'reference_db';
+
+UPDATE config.config
+SET
+  config_data = '{
+   "url" : "jdbc:mysql://<HOSTNAME>:3306/eds?useSSL=false",
+   "username" : "<USERNAME>",
+   "password" : "<PASSWORD>"
+}'
+WHERE app_id = 'global' AND config_id = 'eds_db';
+
+UPDATE config.config
+SET
+  config_data = '{
+ "url" : "jdbc:mysql://<HOSTNAME>:3306/keycloak?useSSL=false"
+ "username" : "<USERNAME>",
+ "password" : "<PASSWORD>",
+}'
+WHERE app_id = 'global' AND config_id = 'keycloak_db';
+
+
+-- hl7receiver
+DELETE FROM config.config
+WHERE app_id = 'hl7receiver';
+INSERT INTO config.config
+(
+	app_id,
+	config_id,
+	config_data
+)
+VALUES
+('hl7receiver', 'url', '"jdbc:mysql://<HOSTNAME>:3306/hl7receiver?useSSL=false'),
+('hl7receiver', 'username', '<USERNAME>'),
+('hl7receiver', 'password', '<PASSWORD>');
+
+-- sfptreader
+DELETE FROM config.config
+WHERE app_id = 'sftpreader';
+INSERT INTO config.config
+(
+	app_id,
+	config_id,
+	config_data
+)
+VALUES
+('sftpreader', 'url', 'jdbc:mysql://<HOSTNAME>:3306/sftpreader?useSSL=false'),
+('sftpreader', 'username', '<USERNAME>'),
+('sftpreader', 'password', '<PASSWORD>');

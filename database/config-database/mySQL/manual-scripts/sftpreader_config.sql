@@ -5,6 +5,6 @@ insert into config.config
 	config_data
 )
 values
-('sftpreader', 'url', 'jdbc:mysql://<HOSTNAME>:3306/sftpreader'),
+('sftpreader', 'url', 'jdbc:mysql://<HOSTNAME>:3306/sftpreader?useSSL=false'),
 ('sftpreader', 'username', '<USERNAME>'),
 ('sftpreader', 'password', '<PASSWORD>');

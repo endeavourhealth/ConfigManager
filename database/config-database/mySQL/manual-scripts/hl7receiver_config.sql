@@ -5,6 +5,6 @@ insert into config.config
 	config_data
 )
 values
-('hl7receiver', 'url', '"jdbc:mysql://<HOSTNAME>:3306/hl7receiver'),
+('hl7receiver', 'url', '"jdbc:mysql://<HOSTNAME>:3306/hl7receiver?useSSL=false'),
 ('hl7receiver', 'username', '<USERNAME>'),
 ('hl7receiver', 'password', '<PASSWORD>');

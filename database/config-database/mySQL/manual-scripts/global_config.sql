@@ -24,8 +24,8 @@ VALUES
   <appender name="db" class="ch.qos.logback.classic.db.DBAppender">
     <!--<connectionSource class="ch.qos.logback.core.db.DriverManagerConnectionSource">-->
     <connectionSource class="org.endeavourhealth.common.config.LogbackPooledConnectionSource">
-      <driverClass>com.mysql.jdbc.Driver</driverClass>
-      <url>jdbc:mysql://<HOSTNAME>:3306/logback</url>
+      <driverClass>com.mysql.cj.jdbc.Driver</driverClass>
+      <url>jdbc:mysql://<HOSTNAME>:3306/logback?useSSL=false</url>
       <user><USERNAME></user>
       <password><PASSWORD></password>
     </connectionSource>
@@ -143,7 +143,7 @@ INSERT INTO config.config
 (app_id, config_id, config_data)
 VALUES
 ('global', 'reference_db','{
-   "url" : "jdbc:mysql://<HOSTNAME>:3306/reference",
+   "url" : "jdbc:mysql://<HOSTNAME>:3306/reference?useSSL=false",
    "username" : "<USERNAME>",
    "password" : "<PASSWORD>"
 }');
@@ -152,16 +152,23 @@ INSERT INTO config.config
 (app_id, config_id, config_data)
 VALUES
 ('global', 'eds_db', '{
-   "url" : "jdbc:mysql://<HOSTNAME>:3306/eds",
+   "url" : "jdbc:mysql://<HOSTNAME>:3306/eds?useSSL=false",
    "username" : "<USERNAME>",
    "password" : "<PASSWORD>"
-}' );
+}');
 
 INSERT INTO config.config
 (app_id, config_id, config_data)
 VALUES
 ('global', 'keycloak_db', '{
- "url" : "jdbc:mysql://<HOSTNAME>:3306/keycloak"
+ "url" : "jdbc:mysql://<HOSTNAME>:3306/keycloak?useSSL=false"
  "username" : "<USERNAME>",
  "password" : "<PASSWORD>",
+}');
+
+INSERT INTO config.config
+(app_id, config_id, config_data)
+VALUES
+('global', 'slack', '{
+  "Production-Alerts": "https://hooks.slack.com/services/<SERVICE/ID/PATH>"
 }');
