@@ -24,17 +24,12 @@ WHERE app_id = 'eds-ui' AND config_id = 'OrganisationManagerDB';
 -- patient-explorer
 UPDATE config.config
 SET
-  config_data = 'jdbc:mysql://<HOSTNAME>:3306/enterprise_data?useSSL=false&user=<USERNAME>&password=<PASSWORD>'
-WHERE app_id = 'eds-patient-explorer' AND config_id = 'enterprise-lite-db';
-
-UPDATE config.config
-SET
   config_data = '{
     "username" : "<USERNAME>",
     "password" : "<PASSWORD>",
     "ui-username" : "<USERNAME>",
     "ui-password" : "<PASSWORD>",
-    "url"    : "jdbc:mysql://<HOSTNAME>:3306/enterprise_data?useSSL=false"
+    "url"    : "jdbc:mysql://<HOSTNAME>:3306/<ENTERPRISE_DB>?useSSL=false"
 }'
 WHERE app_id = 'eds-patient-explorer' AND config_id = 'enterprise-lite';
 
@@ -186,9 +181,9 @@ WHERE app_id = 'global' AND config_id = 'eds_db';
 UPDATE config.config
 SET
   config_data = '{
- "url" : "jdbc:mysql://<HOSTNAME>:3306/keycloak?useSSL=false"
+ "url" : "jdbc:mysql://<HOSTNAME>:3306/keycloak?useSSL=false",
  "username" : "<USERNAME>",
- "password" : "<PASSWORD>",
+ "password" : "<PASSWORD>"
 }'
 WHERE app_id = 'global' AND config_id = 'keycloak_db';
 
