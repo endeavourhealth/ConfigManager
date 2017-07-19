@@ -3,8 +3,7 @@ INSERT INTO config
 VALUES
 ('queuereader', 'inbound', '<?xml version="1.0" encoding="UTF-8"?>
 <QueueReaderConfiguration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../eds-messaging-core/src/main/resources/QueueReaderConfiguration.xsd">
-    <Queue>EdsInbound-GPs_Eng_Wls</Queue>
-    <!--<Queue>EdsInbound-A-M</Queue>-->
+    <Queue>EdsInbound-All</Queue>
     <Pipeline>
         <PostMessageToLog>
             <EventType>Transform_Start</EventType>
@@ -16,10 +15,6 @@ VALUES
         <PostMessageToLog>
             <EventType>Transform_End</EventType>
         </PostMessageToLog>
-        <!--<PostMessageToExchange>
-            <Exchange>EdsResponse</Exchange>
-            <RoutingHeader>SenderLocalIdentifier</RoutingHeader>
-        </PostMessageToExchange>-->
         <PostMessageToExchange>
             <Exchange>EdsProtocol</Exchange>
             <RoutingHeader>SenderLocalIdentifier</RoutingHeader>
@@ -33,7 +28,7 @@ INSERT INTO config
 VALUES
 ('queuereader', 'protocol', '<?xml version="1.0" encoding="UTF-8"?>
 <QueueReaderConfiguration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../eds-messaging-core/src/main/resources/QueueReaderConfiguration.xsd">
-    <Queue>EdsProtocol-A-M</Queue>
+    <Queue>EdsProtocol-All</Queue>
     <Pipeline>
         <RunDataDistributionProtocols/>
         <PostMessageToExchange>
@@ -44,16 +39,20 @@ VALUES
     </Pipeline>
 </QueueReaderConfiguration>');
 
+
 INSERT INTO config
 (app_id, config_id, config_data)
 VALUES
-('queuereader', 'response', '<?xml version="1.0" encoding="UTF-8"?>
+('queuereader', 'transform', '<?xml version="1.0" encoding="UTF-8"?>
 <QueueReaderConfiguration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../eds-messaging-core/src/main/resources/QueueReaderConfiguration.xsd">
-    <Queue>EdsResponse-N-Z</Queue>
+    <Queue>EdsTransform-All</Queue>
     <Pipeline>
-        <PostToRest>
-            <SendHeaders>Content-Type, MessageId</SendHeaders>
-        </PostToRest>
+        <MessageTransformOutbound/>
+        <PostMessageToExchange>
+            <Exchange>EdsSubscriber</Exchange>
+            <RoutingHeader>SenderLocalIdentifier</RoutingHeader>
+            <MulticastHeader>SubscriberBatch</MulticastHeader>
+        </PostMessageToExchange>
     </Pipeline>
 </QueueReaderConfiguration>');
 
@@ -62,37 +61,9 @@ INSERT INTO config
 VALUES
 ('queuereader', 'subscriber', '<?xml version="1.0" encoding="UTF-8"?>
 <QueueReaderConfiguration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../eds-messaging-core/src/main/resources/QueueReaderConfiguration.xsd">
-    <Queue>EdsSubscriber-A-M</Queue>
+    <Queue>EdsSubscriber-All</Queue>
     <Pipeline>
-        <PostMessageToLog>
-            <EventType>Send</EventType>
-        </PostMessageToLog>
         <PostToSubscriberWebService/>
-        <PostToRest/>
     </Pipeline>
 </QueueReaderConfiguration>');
 
-INSERT INTO config
-(app_id, config_id, config_data)
-VALUES
-('queuereader', 'transform', '<?xml version="1.0" encoding="UTF-8"?>
-<QueueReaderConfiguration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../eds-messaging-core/src/main/resources/QueueReaderConfiguration.xsd">
-    <Queue>EdsTransform-A-M</Queue>
-    <Pipeline>
-        <PostMessageToLog>
-            <EventType>Transform_Out_Start</EventType>
-        </PostMessageToLog>
-        <MessageTransformOutbound/>
-        <PostMessageToLog>
-            <EventType>Transform_Out_End</EventType>
-        </PostMessageToLog>
-        <PostMessageToExchange>
-            <Exchange>EdsSubscriber</Exchange>
-            <RoutingHeader>SenderLocalIdentifier</RoutingHeader>
-            <MulticastHeader>SubscriberBatch</MulticastHeader>
-        </PostMessageToExchange>
-        <PostMessageToLog>
-            <EventType>Posted_To_Subscriber_Queue</EventType>
-        </PostMessageToLog>
-    </Pipeline>
-</QueueReaderConfiguration>');

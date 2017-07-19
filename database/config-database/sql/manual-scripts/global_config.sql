@@ -100,34 +100,30 @@ INSERT INTO config
 (app_id, config_id, config_data)
 VALUES
 ('global', 'routings', '[
-{
-	"uuid": "a5813d55-4264-443d-9550-c85712f44a74",
-	"regex": "[A-M].*",
-	"routeKey": "A-M",
-	"name": "Default A-M",
-	"description": "Default fallback group, initial character A-M"
-},
-{
-	"uuid": "a0e84d9b-3f17-4954-ba7a-ceb34564cb84",
-	"regex": "[N-Z].*",
-	"routeKey": "N-Z",
-	"name": "Default A-Z",
-	"description": "Default fallback group, initial character N-Z"
-},
-{
-	"uuid": "b94aac35-b667-45b7-b7c8-d9e8109f9da5",
-	"regex": "[0-9].*",
-	"routeKey": "0-9",
-	"name": "Default 0-9",
-	"description": "Default fallback group, initial character 0-9"
-},
-{
-	"uuid": "1fa471a6-4ec8-4a89-8702-a5bae11f5e69",
-	"regex": ".*",
-	"routeKey": "Fallback",
-	"name": "Default Fallback",
-	"description": "Default fallback group, all remaining"
-}
+  {
+    "exchangeName": "EdsInbound",
+    "regex": ".*",
+    "routeKey": "All",
+    "description": "All inbound"
+  },
+  {
+    "exchangeName": "EdsProtocol",
+    "regex": ".*",
+    "routeKey": "All",
+    "description": "All protocols"
+  },
+  {
+    "exchangeName": "EdsTransform",
+    "regex": ".*",
+    "routeKey": "All",
+    "description": "All outbound transform"
+  },
+  {
+    "exchangeName": "EdsSubscriber",
+    "regex": ".*",
+    "routeKey": "All",
+    "description": "All outbound subscriber"
+  }
 ]');
 
 INSERT INTO config
