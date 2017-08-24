@@ -161,9 +161,9 @@ INSERT INTO config.config
 (app_id, config_id, config_data)
 VALUES
 ('global', 'keycloak_db', '{
- "url" : "jdbc:mysql://<HOSTNAME>:3306/keycloak?useSSL=false"
+ "url" : "jdbc:mysql://<HOSTNAME>:3306/keycloak?useSSL=false",
  "username" : "<USERNAME>",
- "password" : "<PASSWORD>",
+ "password" : "<PASSWORD>"
 }');
 
 INSERT INTO config.config
