@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.endeavourhealth.configmanager</groupId>
     <artifactId>root</artifactId>
-    <version>1.09-SNAPSHOT</version>
+    <version>1.10-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <properties>
@@ -13,7 +13,8 @@
         <maven-surefire-plugin.version>2.19.1</maven-surefire-plugin.version>
         <maven-release-plugin.version>2.5.3</maven-release-plugin.version>
 
-        <endeavour-cache.version>1.0-SNAPSHOT</endeavour-cache.version>
+        <endeavour-cache.version>1.1-SNAPSHOT</endeavour-cache.version>
+        <commons-lang3.version>3.4</commons-lang3.version>
         <hibernate.version>5.2.5.Final</hibernate.version>
         <hikari.version>2.5.1</hikari.version>
         <junit.version>4.12</junit.version>
