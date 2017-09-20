@@ -13,6 +13,16 @@ VALUES
 INSERT INTO config.config
 (app_id, config_id, config_data)
 VALUES
+('messaging-api', 'aws', '{
+  "s3-bucket": "<S3BUCKETNAME>",
+  "access-key-id": "<ACCESSKEYID>",
+  "secret-access-key": "<SECRETACCESSKEY>",
+  "region": "<REGION>"
+}' );
+
+INSERT INTO config.config
+(app_id, config_id, config_data)
+VALUES
 ('messaging-api', 'api-configuration', '<?xml version="1.0" encoding="UTF-8"?>
 <ApiConfiguration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                   xsi:noNamespaceSchemaLocation="../../../../eds-messaging-core/src/main/resources/ApiConfiguration.xsd">
