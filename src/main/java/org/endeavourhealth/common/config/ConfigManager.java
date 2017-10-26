@@ -3,6 +3,7 @@ package org.endeavourhealth.common.config;
 import ch.qos.logback.classic.LoggerContext;
 import ch.qos.logback.classic.joran.JoranConfigurator;
 import com.fasterxml.jackson.databind.JsonNode;
+import org.apache.commons.lang3.StringUtils;
 import org.endeavourhealth.common.cache.CacheManager;
 import org.endeavourhealth.common.cache.ObjectMapperPool;
 import org.endeavourhealth.common.config.dataAccess.DataAccessLayer;
@@ -113,12 +114,20 @@ public class ConfigManager {
 
 	public static JsonNode getConfigurationAsJson(String configId) throws IOException {
 		String json = ConfigManager.getConfiguration(configId);
-		return ObjectMapperPool.getInstance().readTree(json);
+		if (!StringUtils.isEmpty(json)) {
+			return ObjectMapperPool.getInstance().readTree(json);
+		} else {
+			return null;
+		}
 	}
 
 	public static JsonNode getConfigurationAsJson(String configId, String appIdParam) throws IOException {
 		String json = ConfigManager.getConfiguration(configId, appIdParam);
-		return ObjectMapperPool.getInstance().readTree(json);
+		if (!StringUtils.isEmpty(json)) {
+			return ObjectMapperPool.getInstance().readTree(json);
+		} else {
+			return null;
+		}
 	}
 
 	public static Map<String, String> getConfigurations(String appIdParam) {
