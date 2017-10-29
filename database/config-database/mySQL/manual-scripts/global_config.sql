@@ -1,3 +1,5 @@
+USE config;
+
 -- Cassandra depreciated in v2
 -- INSERT INTO config
 -- (app_id, config_id, config_data)
@@ -8,7 +10,7 @@
 --   ]
 --  }' );
 
-INSERT INTO config.config
+INSERT INTO config
 (app_id, config_id, config_data)
 VALUES
 ('global', 'logback', '<?xml version="1.0" encoding="UTF-8"?>
@@ -86,7 +88,7 @@ VALUES
 
 
 
-INSERT INTO config.config
+INSERT INTO config
 (app_id, config_id, config_data)
 VALUES
 ('global', 'rabbit', '{
@@ -96,7 +98,7 @@ VALUES
 	"managementPortOffset" : "10000"
 }');
 
-INSERT INTO config.config
+INSERT INTO config
 (app_id, config_id, config_data)
 VALUES
 ('global', 'routings', '[
@@ -130,7 +132,7 @@ VALUES
 }
 ]');
 
-INSERT INTO config.config
+INSERT INTO config
 (app_id, config_id, config_data)
 VALUES
 ('global', 'coding','{
@@ -139,7 +141,7 @@ VALUES
    "password" : "<PASSWORD>"
 }');
 
-INSERT INTO config.config
+INSERT INTO config
 (app_id, config_id, config_data)
 VALUES
 ('global', 'reference_db','{
@@ -148,7 +150,7 @@ VALUES
    "password" : "<PASSWORD>"
 }');
 
-INSERT INTO config.config
+INSERT INTO config
 (app_id, config_id, config_data)
 VALUES
 ('global', 'eds_db', '{
@@ -157,7 +159,7 @@ VALUES
    "password" : "<PASSWORD>"
 }');
 
-INSERT INTO config.config
+INSERT INTO config
 (app_id, config_id, config_data)
 VALUES
 ('global', 'keycloak_db', '{
@@ -166,9 +168,63 @@ VALUES
  "password" : "<PASSWORD>"
 }');
 
-INSERT INTO config.config
+INSERT INTO config
 (app_id, config_id, config_data)
 VALUES
 ('global', 'slack', '{
   "Production-Alerts": "https://hooks.slack.com/services/<SERVICE/ID/PATH>"
 }');
+
+INSERT INTO config
+(app_id, config_id, config_data)
+VALUES
+(
+	'global', 
+	'db_ehr', 
+	'{
+		"url" : "jdbc:mysql://<HOSTNAME>:3306/ehr?useSSL=false",
+		"username" : "<USERNAME>",
+		"password" : "<PASSWORD>"
+	}'
+);
+
+INSERT INTO config
+(app_id, config_id, config_data)
+VALUES
+(
+	'global',
+	'db_audit',
+	'{
+		"url" : "jdbc:mysql://<HOSTNAME>:3306/audit?useSSL=false",
+		"username" : "<USERNAME>",
+		"password" : "<PASSWORD>"
+	}'
+);
+
+INSERT INTO config
+(app_id, config_id, config_data)
+VALUES
+(
+	'global',
+	'db_publisher_transform',
+	'{
+		"url" : "jdbc:mysql://<HOSTNAME>:3306/publisher_transform?useSSL=false",
+		"username" : "<USERNAME>",
+		"password" : "<PASSWORD>"
+	}'
+);
+
+
+
+INSERT INTO config
+(app_id, config_id, config_data)
+VALUES
+(
+	'global',
+	'db_admin',
+	'{
+		"url" : "jdbc:mysql://<HOSTNAME>:3306/admin?useSSL=false",
+		"username" : "<HOSTNAME>",
+		"password" : "<HOSTNAME>"
+	}'
+);
