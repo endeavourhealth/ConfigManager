@@ -224,7 +224,22 @@ VALUES
 	'db_admin',
 	'{
 		"url" : "jdbc:mysql://<HOSTNAME>:3306/admin?useSSL=false",
-		"username" : "<HOSTNAME>",
+		"username" : "<USERNAME>",
 		"password" : "<HOSTNAME>"
 	}'
+);
+
+INSERT INTO config
+(app_id, config_id, config_data)
+VALUES
+(
+	'global',
+	'coding',
+	'{
+   "url" : "jdbc:mysql://<HOSTNAME>:3306/reference?useSSL=false",
+   "username" : "<USERNAME>",
+   "password" : "<PASSWORD>",
+   "class": "com.mysql.cj.jdbc.MysqlDataSource",
+   "dialect": "org.hibernate.dialect.MySQLDialect"
+}'
 );
