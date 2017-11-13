@@ -47,9 +47,9 @@ public class ConfigManager {
 			LOG.info("Initializing logback");
 			initializeLogback();
 		} catch (Exception e) {
-			throw new ConfigManagerException("Failed to initialize ConfigManager : "+ getStackTrace(e), e);
+			throw new ConfigManagerException("Failed to initialize ConfigManager [" + appId + "] : "+ getStackTrace(e), e);
 		}
-		LOG.info("Config manager initialized");
+		LOG.info("Config manager initialized [" + appId + "]");
 	}
 
 	public static void initializeLogback(String logbackXml) {
