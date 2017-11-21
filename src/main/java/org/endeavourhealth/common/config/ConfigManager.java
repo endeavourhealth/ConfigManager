@@ -177,4 +177,8 @@ public class ConfigManager {
 
 		initializeLogback(logbackXml);
 	}
+
+	public static String getAppId() {
+		return _appId;
+	}
 }
