@@ -65,9 +65,9 @@ public class ConfigManager {
 
 	public static void initializeLogback(String logbackXml) {
 
-		String logFilePrefix = _appSubId;
-		if (logFilePrefix == null) {
-			logFilePrefix = "log";
+		String logFilePrefix = _appId;
+		if (_appSubId != null) {
+			logFilePrefix += "-" + _appSubId;
 		}
 
 		//the logback XML uses a system property to write the log file, which we must set before loading the config
