@@ -26,6 +26,7 @@ public class ConfigManager {
 
 	static DataAccessLayer _dataAccessLayer;
 	private static String _appId;
+	private static String _appSubId; //secondary ID so we can tell the difference between different Queue Reader apps
 	private static ConfigCache _configCache;
 
 	static { //runs when the main class is loaded.
@@ -39,7 +40,12 @@ public class ConfigManager {
 	}
 
 	public synchronized static void Initialize(String appId) throws ConfigManagerException {
+		initialize(appId, null);
+	}
+
+	public synchronized static void initialize(String appId, String appSubId) throws ConfigManagerException {
 		_appId = appId;
+		_appSubId = appSubId;
 
 		try {
 			LOG.info("Initializing data access layer..");
@@ -49,14 +55,25 @@ public class ConfigManager {
 		} catch (Exception e) {
 			throw new ConfigManagerException("Failed to initialize ConfigManager [" + appId + "] : "+ getStackTrace(e), e);
 		}
-		LOG.info("Config manager initialized [" + appId + "]");
+
+		if (appSubId == null) {
+			LOG.info("Config manager initialized [" + appId + "]");
+		} else {
+			LOG.info("Config manager initialized [" + appId + " - " + appSubId + "]");
+		}
 	}
 
 	public static void initializeLogback(String logbackXml) {
 
+		String logFilePrefix = _appSubId;
+		if (logFilePrefix == null) {
+			logFilePrefix = "log";
+		}
+
 		//the logback XML uses a system property to write the log file, which we must set before loading the config
 		Properties props = System.getProperties();
 		props.setProperty("location.of.the.log.folder", _appId);
+		props.setProperty("log.file.prefix", logFilePrefix);
 
 		LoggerContext loggerContext = (LoggerContext) LoggerFactory.getILoggerFactory();
 		loggerContext.reset();
