@@ -17,7 +17,8 @@ VALUES
   "s3-bucket": "<S3BUCKETNAME>",
   "access-key-id": "<ACCESSKEYID>",
   "secret-access-key": "<SECRETACCESSKEY>",
-  "region": "<REGION>"
+  "region": "<REGION>",
+  "keypath-prefix: "<S3 KEYPATH PREFIX>"
 }' );
 
 INSERT INTO config.config
