@@ -203,6 +203,13 @@ public class ConfigManager {
 	}
 
 	public static void shutdownLogback() {
+        LoggerContext loggerContext = (LoggerContext) LoggerFactory.getILoggerFactory();
+
+        if (loggerContext != null) {
+            LOG.trace("Stopping logger context");
+            loggerContext.stop();
+        }
+
         if (_timer != null) {
             LOG.trace("Stopping logback timer...");
             _timer.stop();
