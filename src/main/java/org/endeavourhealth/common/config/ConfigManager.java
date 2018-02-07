@@ -208,6 +208,7 @@ public class ConfigManager {
         if (loggerContext != null) {
             LOG.trace("Stopping logger context");
             loggerContext.stop();
+            LOG.trace("Logger context stopped");
         }
 
         if (_timer != null) {
