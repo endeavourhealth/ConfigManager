@@ -1,8 +1,9 @@
 ![Endeavour Logo](http://www.endeavourhealth.org/github/logo-text-left-cropped.png)
 
 ## Config Manager
-![Version](https://s3.eu-west-2.amazonaws.com/endeavour-codebuild/ConfigManager/badges/version.svg)
-![Unit Tests](https://s3.eu-west-2.amazonaws.com/endeavour-codebuild/ConfigManager/badges/unit-test.svg)
+![Version](https://s3.eu-west-2.amazonaws.com/endeavour-codebuild/Common-Config/badges/version.svg)
+![Build Status](https://codebuild.eu-west-2.amazonaws.com/badges?uuid=eyJlbmNyeXB0ZWREYXRhIjoibU1zNDFESDFJSnVQVW5uQmI3NXpIMnozQjlDazNheEVDNFFEa3hkNmZVRW5UTE43bGJLMHVKak0wWWUyVHFJTDFZUWFXMkh5dmpDU293b0QxRGIyTkQ0PSIsIml2UGFyYW1ldGVyU3BlYyI6IkZvcFJSTm44OWMzTGl3a3UiLCJtYXRlcmlhbFNldFNlcmlhbCI6MX0%3D&branch=master)
+![Unit Tests](https://s3.eu-west-2.amazonaws.com/endeavour-codebuild/Common-Config/badges/unit-test.svg)
 
 A centralised configuration service for providing configuration to Endeavour Health services and components.
 
