@@ -14,3 +14,8 @@ phases:
       - IP=$(curl http://checkip.amazonaws.com)/32
       - echo $IP of CodeBuild Instance
       - echo Build completed on `date`
+      - chmod +x aws_scripts/make-badges.sh
+      - aws_scripts/make-badges.sh
+artifacts:
+  files:
+    - badges/**/*
