@@ -205,16 +205,6 @@ public class ConfigManager {
     public static void shutdownLogback() {
         LoggerContext loggerContext = (LoggerContext) LoggerFactory.getILoggerFactory();
 
-        if (loggerContext != null) {
-            LOG.trace("Stopping logger context");
-            try {
-                loggerContext.stop();
-                LOG.trace("Logger context stopped");
-            } catch (Exception e) {
-                LOG.error("Error stopping logger context", e);
-            }
-        }
-
         if (_timer != null) {
             LOG.trace("Stopping logback timer...");
             try {
@@ -224,5 +214,18 @@ public class ConfigManager {
                 LOG.error("Error stopping logback timer", e);
             }
         }
+
+        // Only use console from this point as logback is being shut down
+        if (loggerContext != null) {
+            System.out.println("Stopping logger context");
+            try {
+                loggerContext.stop();
+                System.out.println("Logger context stopped");
+            } catch (Exception e) {
+                System.out.println("Error stopping logger context");
+                e.printStackTrace();
+            }
+        }
+
     }
 }
