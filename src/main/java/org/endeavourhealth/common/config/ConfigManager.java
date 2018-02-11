@@ -206,23 +206,23 @@ public class ConfigManager {
         LoggerContext loggerContext = (LoggerContext) LoggerFactory.getILoggerFactory();
 
         if (_timer != null) {
-            LOG.trace("Stopping logback timer...");
+            LOG.trace("[" + _appId + "] - Stopping logback timer ...");
             try {
                 _timer.stop();
-                LOG.trace("Logback timer stopped.");
+                LOG.trace("[" + _appId + "] - Logback timer stopped.");
             } catch (Exception e) {
-                LOG.error("Error stopping logback timer", e);
+                LOG.error("[" + _appId + "] - Error stopping logback timer", e);
             }
         }
 
         // Only use console from this point as logback is being shut down
         if (loggerContext != null) {
-            System.out.println("Stopping logger context");
+            System.out.println("[" + _appId + "] - Stopping logger context");
             try {
                 loggerContext.stop();
-                System.out.println("Logger context stopped");
+                System.out.println("[" + _appId + "] - Logger context stopped");
             } catch (Exception e) {
-                System.out.println("Error stopping logger context");
+                System.out.println("[" + _appId + "] - Error stopping logger context");
                 e.printStackTrace();
             }
         }
