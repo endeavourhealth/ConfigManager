@@ -4,11 +4,10 @@ mkdir badges
 
 # Artifact
 artifact=$( xmllint --xpath "/*[local-name() = 'project']/*[local-name() = 'artifactId']/text()" pom.xml )
-artifact=${artifact/-/--}
 
 # Version
 version=$( xmllint --xpath "/*[local-name() = 'project']/*[local-name() = 'version']/text()" pom.xml )
-version=${version/-/--}
+version=${version/-/--} # Hyphen escaping required by shields.io
 
 # Update badges pre-build
 echo "https://img.shields.io/badge/Build-In_progress-orange.svg"
@@ -21,11 +20,11 @@ echo "https://img.shields.io/badge/Unit_Tests-Pending-orange.svg"
 curl -s "https://img.shields.io/badge/Unit_Tests-Pending-orange.svg" > badges/unit-test.svg
 
 # Sync with S3
-aws s3 cp badges s3://endeavour-codebuild/badges/${artifact}/ --recursive
+aws s3 cp badges s3://endeavour-codebuild/badges/${artifact}/ --recursive --acl public-read
 
 # Build
 { #try
-    mvn -B deploy &&
+    eval $* &&
     buildresult=0
 } || { #catch
     buildresult=1
@@ -57,6 +56,6 @@ echo "Generating badge 'https://img.shields.io/badge/Unit_Tests-$badge_status-$b
 curl -s "https://img.shields.io/badge/Unit_Tests-$badge_status-$badge_colour.svg" > badges/unit-test.svg
 
 # Sync with S3
-aws s3 cp badges s3://endeavour-codebuild/badges/${artifact}/ --recursive
+aws s3 cp badges s3://endeavour-codebuild/badges/${artifact}/ --recursive --acl public-read
 
 exit ${buildresult}
