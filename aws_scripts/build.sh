@@ -1,5 +1,7 @@
 #!/bin/bash
 
+mkdir badges
+
 # Artifact
 artifact=$( xmllint --xpath "/*[local-name() = 'project']/*[local-name() = 'artifactId']/text()" pom.xml )
 artifact=${artifact/-/--}
