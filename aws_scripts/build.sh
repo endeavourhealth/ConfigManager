@@ -21,7 +21,7 @@ echo "https://img.shields.io/badge/Unit_Tests-Pending-orange.svg"
 curl -s "https://img.shields.io/badge/Unit_Tests-Pending-orange.svg" > badges/unit-test.svg
 
 # Sync with S3
-aws s3 cp badges/ s3://endeavour-codebuild/badges/${artifact}/
+aws s3 cp badges s3://endeavour-codebuild/badges/${artifact}/ --recursive
 
 # Build
 { #try
@@ -57,6 +57,6 @@ echo "Generating badge 'https://img.shields.io/badge/Unit_Tests-$badge_status-$b
 curl -s "https://img.shields.io/badge/Unit_Tests-$badge_status-$badge_colour.svg" > badges/unit-test.svg
 
 # Sync with S3
-aws s3 cp badges/ s3://endeavour-codebuild/badges/${artifact}/
+aws s3 cp badges s3://endeavour-codebuild/badges/${artifact}/ --recursive
 
 exit ${buildresult}
