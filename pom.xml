@@ -4,7 +4,7 @@
 
     <groupId>org.endeavourhealth.configmanager</groupId>
     <artifactId>configmanager</artifactId>
-    <version>1.19-SNAPSHOT</version>
+    <version>1.20-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <properties>
@@ -15,6 +15,7 @@
         <maven-release-plugin.version>2.5.3</maven-release-plugin.version>
 
         <endeavour-cache.version>1.1-SNAPSHOT</endeavour-cache.version>
+
         <commons-lang3.version>3.4</commons-lang3.version>
         <hibernate.version>5.2.5.Final</hibernate.version>
         <hikari.version>2.5.1</hikari.version>
