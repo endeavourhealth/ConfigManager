@@ -202,6 +202,10 @@ public class ConfigManager {
         return _appId;
     }
 
+    public static String getAppSubId() {
+        return _appSubId;
+    }
+
     public static void shutdownLogback() {
         LoggerContext loggerContext = (LoggerContext) LoggerFactory.getILoggerFactory();
 
