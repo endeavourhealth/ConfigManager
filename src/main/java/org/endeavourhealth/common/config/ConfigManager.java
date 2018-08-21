@@ -28,7 +28,7 @@ public class ConfigManager {
     private static String _appId;
     private static String _appSubId; //secondary ID so we can tell the difference between different Queue Reader apps
     private static ConfigCache _configCache;
-    private static LogbackReconfigureFilter _timer = null;
+    //private static LogbackReconfigureFilter _timer = null; //removed as this causes confusing logging when DB calls fail because it triggers further DB calls
 
     static { //runs when the main class is loaded.
         LOG.info("Config manager created");
@@ -89,12 +89,12 @@ public class ConfigManager {
         }
 
         //add the turbo filter to check for changes every so often (since we can't use the default one as we don't load from a file)
-        if (_timer == null) {
+        /*if (_timer == null) {
             _timer = new LogbackReconfigureFilter(logbackXml, 60 * 1000);
             _timer.setContext(loggerContext);
             _timer.start();
             loggerContext.addTurboFilter(_timer);
-        }
+        }*/
     }
 
     public static String getConfiguration(String configId) {
@@ -209,7 +209,7 @@ public class ConfigManager {
     public static void shutdownLogback() {
         LoggerContext loggerContext = (LoggerContext) LoggerFactory.getILoggerFactory();
 
-        if (_timer != null) {
+        /*if (_timer != null) {
             LOG.trace("[" + _appId + "] - Stopping logback timer ...");
             try {
                 _timer.stop();
@@ -217,7 +217,7 @@ public class ConfigManager {
             } catch (Exception e) {
                 LOG.error("[" + _appId + "] - Error stopping logback timer", e);
             }
-        }
+        }*/
 
         // Only use console from this point as logback is being shut down
         if (loggerContext != null) {
