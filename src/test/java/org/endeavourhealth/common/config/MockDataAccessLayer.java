@@ -18,7 +18,7 @@ public class MockDataAccessLayer implements DataAccessLayer {
 	}
 
 	@Override
-	public boolean setConfiguration(String configId, String appIdParam, String data) {
+	public boolean setConfiguration(String configId, String appIdParam, String data, boolean createIfNecessary) {
 		this.data = data;
 		return true;
 	}
@@ -31,5 +31,10 @@ public class MockDataAccessLayer implements DataAccessLayer {
 	@Override
 	public Set<String> getAppIds() {
 		return null;
+	}
+
+	@Override
+	public boolean deleteConfiguration(String configId, String appIdParam) {
+		return false;
 	}
 }

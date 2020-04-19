@@ -9,9 +9,11 @@ public interface DataAccessLayer {
 
     String getConfiguration(String configId, String appIdParam);
 
-    boolean setConfiguration(String configId, String appIdParam, String data);
+    boolean setConfiguration(String configId, String appIdParam, String data, boolean createIfNecessary);
 
     Map<String, String> getConfigurations(String appIdParam);
 
     Set<String> getAppIds();
+
+    boolean deleteConfiguration(String configId, String appIdParam);
 }

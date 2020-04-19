@@ -46,18 +46,28 @@ public class JdbcDAL implements DataAccessLayer {
 	}
 
 	@Override
-	public boolean setConfiguration(String configId, String appIdParam, String data) {
+	public boolean setConfiguration(String configId, String appIdParam, String data, boolean createIfNecessary) {
 		try(Connection conn = getConnection()) {
-			String sql =
-					" update config c" +
-							" set config_data = ? " +
-							" where c.app_id = ?" +
-							" and   c.config_id = ?";
+			String sql = null;
+			if (createIfNecessary) {
+				//note ordering of cols is explicitly the same as the other SQL, so the parameters can be added in the same order
+				sql = "INSERT INTO config (config_data, app_id, config_id)"
+						+ " VALUES (?, ?, ?)"
+						+ " ON DUPLICATE KEY UPDATE"
+						+ " config_data = VALUES(config_data)";
+			} else {
+				sql = "UPDATE config "
+						+ " SET config_data = ?"
+						+ " WHERE app_id = ?"
+						+ " AND config_id = ?";;
 
-			try(PreparedStatement statement = conn.prepareStatement(sql)) {
-				statement.setString(1, data);
-				statement.setString(2, appIdParam);
-				statement.setString(3, configId);
+			}
+
+			try (PreparedStatement statement = conn.prepareStatement(sql)) {
+				int col = 1;
+				statement.setString(col++, data);
+				statement.setString(col++, appIdParam);
+				statement.setString(col++, configId);
 
 				//changed to return whether a row was updated
 				int rows = statement.executeUpdate();
@@ -76,8 +86,7 @@ public class JdbcDAL implements DataAccessLayer {
 	public Map<String, String> getConfigurations(String appIdParam) {
 		try (Connection conn = getConnection()) {
 
-			String sql =
-					" select config_id, config_data" +
+			String sql = " select config_id, config_data" +
 							" from " +
 							"    config" +
 							" where app_id = ?";
@@ -126,6 +135,26 @@ public class JdbcDAL implements DataAccessLayer {
 			return null;
 		}
 
+	}
+
+	@Override
+	public boolean deleteConfiguration(String configId, String appIdParam) {
+		try(Connection conn = getConnection()) {
+			String sql = "DELETE FROM config WHERE app_id = ? AND config_id = ?";
+
+			try(PreparedStatement statement = conn.prepareStatement(sql)) {
+				int col = 1;
+				statement.setString(col++, appIdParam);
+				statement.setString(col++, configId);
+
+				int rows = statement.executeUpdate();
+				return rows > 0;
+			}
+
+		} catch (Exception e) {
+			LOG.error("Error setting configuration ["+configId+"] for application ["+appIdParam+"]", e);
+			return false;
+		}
 	}
 
 	private Connection getConnection() throws SQLException, ClassNotFoundException {

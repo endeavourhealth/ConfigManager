@@ -25,12 +25,12 @@ public class ConfigManagerDevTest {
 		ConfigCache.TIMEOUT = 60;
 
 		// Test basic retrieval
-		mockDb.setConfiguration("test", "test", INITIAL_DATA);
+		mockDb.setConfiguration("test", "test", INITIAL_DATA, false);
 		String result = ConfigManager.getConfiguration("test", "test");
 		Assert.assertEquals(INITIAL_DATA, result);
 
 		// Test Caching (should still be initial value)
-		mockDb.setConfiguration("test", "test", CHANGED_DATA);
+		mockDb.setConfiguration("test", "test", CHANGED_DATA, false);
 		result = ConfigManager.getConfiguration("test", "test");
 		Assert.assertEquals(INITIAL_DATA, result);
 

@@ -177,15 +177,19 @@ public class ConfigManager {
     public static void setConfiguration(String configId, String data) throws Exception {
 
         //changed to detect failure and try again with the "global" config app ID
-        if (!setConfiguration(configId, _appId, data)) {
-            if (!setConfiguration(configId, APP_GLOBAL, data)) {
+        if (!_dataAccessLayer.setConfiguration(configId, _appId, data, false)) {
+            if (!_dataAccessLayer.setConfiguration(configId, APP_GLOBAL, data, false)) {
                 throw new Exception("Failed to update config record for config " + configId + " and app " + _appId + " or " + APP_GLOBAL);
             }
         }
     }
 
     public synchronized static boolean setConfiguration(String configId, String appIdParam, String data) {
-        return _dataAccessLayer.setConfiguration(configId, appIdParam, data);
+        return _dataAccessLayer.setConfiguration(configId, appIdParam, data, true);
+    }
+
+    public synchronized static boolean deleteConfiguration(String configId, String appIdParam) {
+        return _dataAccessLayer.deleteConfiguration(configId, appIdParam);
     }
 
     private static String getStackTrace(Throwable throwable) {
