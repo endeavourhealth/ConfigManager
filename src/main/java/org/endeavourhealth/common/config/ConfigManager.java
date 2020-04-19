@@ -17,6 +17,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
 
 public class ConfigManager {
     private static final Logger LOG = LoggerFactory.getLogger(ConfigManager.class);
@@ -153,6 +154,11 @@ public class ConfigManager {
     public static Map<String, String> getConfigurations(String appIdParam) {
         return _dataAccessLayer.getConfigurations(appIdParam);
     }
+
+    public static Set<String> getAppIds() {
+        return _dataAccessLayer.getAppIds();
+    }
+
 
     public static Map<String, JsonNode> getConfigurationsAsJson(String appIdParam) throws IOException {
         Map<String, String> map = getConfigurations(appIdParam);

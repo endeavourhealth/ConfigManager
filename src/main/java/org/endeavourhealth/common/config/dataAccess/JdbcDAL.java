@@ -4,9 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.sql.*;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Properties;
+import java.util.*;
 
 public class JdbcDAL implements DataAccessLayer {
 	private static final String JDBC_CLASS_ENV_VAR = "CONFIG_JDBC_CLASS";
@@ -103,6 +101,31 @@ public class JdbcDAL implements DataAccessLayer {
 			LOG.error("Error getting configurations application [" + appIdParam + "]", e);
 			return null;
 		}
+	}
+
+	@Override
+	public Set<String> getAppIds() {
+		try (Connection conn = getConnection()) {
+
+			String sql = "SELECT DISTINCT app_id FROM config";
+
+			try (PreparedStatement statement = conn.prepareStatement(sql)) {
+
+				ResultSet rs = statement.executeQuery();
+
+				Set<String> ret = new HashSet<>();
+				while (rs.next()) {
+					String appId = rs.getString(1);
+					ret.add(appId);
+				}
+				return ret;
+			}
+
+		} catch (Exception e) {
+			LOG.error("Error getting app IDs", e);
+			return null;
+		}
+
 	}
 
 	private Connection getConnection() throws SQLException, ClassNotFoundException {
