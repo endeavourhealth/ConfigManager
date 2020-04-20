@@ -1,10 +1,12 @@
 package org.endeavourhealth.common.config.dataAccess;
 
+import org.endeavourhealth.common.config.ConfigHistory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.sql.*;
 import java.util.*;
+import java.util.Date;
 
 public class JdbcDAL implements DataAccessLayer {
 	private static final String JDBC_CLASS_ENV_VAR = "CONFIG_JDBC_CLASS";
@@ -154,6 +156,45 @@ public class JdbcDAL implements DataAccessLayer {
 		} catch (Exception e) {
 			LOG.error("Error setting configuration ["+configId+"] for application ["+appIdParam+"]", e);
 			return false;
+		}
+	}
+
+	@Override
+	public List<ConfigHistory> getConfigurationHistory(String configId, String appIdParam) {
+
+		try (Connection conn = getConnection()) {
+			String sql = "SELECT config_data, dt_changed FROM config_history WHERE app_id = ? AND config_id = ? ORDER BY dt_changed ASC";
+
+			try(PreparedStatement statement = conn.prepareStatement(sql)) {
+				int col = 1;
+				statement.setString(col++, appIdParam);
+				statement.setString(col++, configId);
+
+				List<ConfigHistory> ret = new ArrayList<>();
+				String previousData = null;
+
+				ResultSet rs = statement.executeQuery();
+				while (rs.next()) {
+					col = 1;
+					String configData = rs.getString(col++);
+					Date dtChanged = new java.util.Date(rs.getTimestamp(col++).getTime());
+
+					ConfigHistory h = new ConfigHistory();
+					h.setDtChanged(dtChanged);
+					h.setChangedTo(configData);
+					h.setChangedFrom(previousData);
+
+					ret.add(h);
+
+					previousData = configData;
+				}
+
+				return ret;
+			}
+
+		} catch (Exception e) {
+			LOG.error("Error getting configuration history for config_id [" + configId + "] for appId [" + appIdParam + "]", e);
+			return null;
 		}
 	}
 

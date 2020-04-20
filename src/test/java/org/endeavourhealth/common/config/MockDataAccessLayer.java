@@ -2,6 +2,7 @@ package org.endeavourhealth.common.config;
 
 import org.endeavourhealth.common.config.dataAccess.DataAccessLayer;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -36,5 +37,10 @@ public class MockDataAccessLayer implements DataAccessLayer {
 	@Override
 	public boolean deleteConfiguration(String configId, String appIdParam) {
 		return false;
+	}
+
+	@Override
+	public List<ConfigHistory> getConfigurationHistory(String configId, String appIdParam) {
+		return null;
 	}
 }

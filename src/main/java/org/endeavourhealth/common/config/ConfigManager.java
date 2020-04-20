@@ -14,10 +14,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Properties;
-import java.util.Set;
+import java.util.*;
 
 public class ConfigManager {
     private static final Logger LOG = LoggerFactory.getLogger(ConfigManager.class);
@@ -242,4 +239,10 @@ public class ConfigManager {
         }
 
     }
+
+    public static List<ConfigHistory> getConfigurationHistory(String configId, String appIdParam) {
+        return _dataAccessLayer.getConfigurationHistory(configId, appIdParam);
+    }
+
+
 }
