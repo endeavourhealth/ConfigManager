@@ -4,7 +4,7 @@
 
   <groupId>org.endeavourhealth.configmanager</groupId>
   <artifactId>configmanager</artifactId>
-  <version>1.30-SNAPSHOT</version>
+  <version>1.31-SNAPSHOT</version>
   <packaging>jar</packaging>
 
   <properties>
@@ -62,6 +62,10 @@
     <dependency>
       <groupId>com.zaxxer</groupId>
       <artifactId>HikariCP</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>jul-to-slf4j</artifactId>
     </dependency>
 
     <dependency>

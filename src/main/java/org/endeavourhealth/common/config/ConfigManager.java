@@ -11,6 +11,7 @@ import org.endeavourhealth.common.config.dataAccess.JdbcDAL;
 import org.endeavourhealth.common.config.models.ConfigCacheEntry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.bridge.SLF4JBridgeHandler;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -85,6 +86,12 @@ public class ConfigManager {
         } catch (Exception e) {
             throw new RuntimeException("Unable to configure logback", e);
         }
+
+        //install the JUL (java.util.logging) to SLF4J logging bridge so that
+        //anything using JUL will have its logging routed through SLF4J to logback, otherwise
+        //we lose logging
+        SLF4JBridgeHandler.removeHandlersForRootLogger();
+        SLF4JBridgeHandler.install();
 
         //add the turbo filter to check for changes every so often (since we can't use the default one as we don't load from a file)
         /*if (_timer == null) {
