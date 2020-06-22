@@ -10,7 +10,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class ConfigCache implements ICache {
-	private final static int TIMEOUT = 60;
+	public static int TIMEOUT = 60;
 
 	private static Map<String, ConfigCacheEntry> _configCache = new ConcurrentHashMap<>();
 
