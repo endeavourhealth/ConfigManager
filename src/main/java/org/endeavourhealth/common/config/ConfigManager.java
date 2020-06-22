@@ -108,31 +108,36 @@ public class ConfigManager {
 
 
     public synchronized static String getConfiguration(String configId, String appIdParam) {
-        // Try to get from cache
-        ConfigCacheEntry cacheEntry = _configCache.get(configId, appIdParam);
-        if (cacheEntry != null)
-            return cacheEntry.getConfigData();
 
-        // If no app specific result, look for a global setting
-        cacheEntry = _configCache.get(configId, APP_GLOBAL);
-        if (cacheEntry != null)
-            return cacheEntry.getConfigData();
+        //Try to get from cache using specific APP ID
+        ConfigCacheEntry cached = _configCache.get(configId, appIdParam);
+        if (cached != null) {
+            return cached.getConfigData();
+        }
 
-        // Failed, now try DB
+        //If no app specific result, look for a global setting
+        cached = _configCache.get(configId, APP_GLOBAL);
+        if (cached != null) {
+            return cached.getConfigData();
+        }
+
+        //Failed, now try DB for specific APP ID
         String data = _dataAccessLayer.getConfiguration(configId, appIdParam);
         if (data != null) {
-            cacheEntry = new ConfigCacheEntry(data);
-            _configCache.put(configId, appIdParam, cacheEntry);
+            _configCache.put(configId, appIdParam, new ConfigCacheEntry(data));
             return data;
         }
 
-        // If no app specific result, look for a global setting
+        //If no app specific result, check DB for a global setting
         data = _dataAccessLayer.getConfiguration(configId, APP_GLOBAL);
         if (data != null) {
-            cacheEntry = new ConfigCacheEntry(data);
-            _configCache.put(configId, APP_GLOBAL, cacheEntry);
+            _configCache.put(configId, APP_GLOBAL, new ConfigCacheEntry(data));
             return data;
         }
+
+        //if we failed to find a record, we still need to add to the cache, otherwise repeated checks for
+        //non-existent records (which is possible) will cause repeated DB hits
+        _configCache.put(configId, APP_GLOBAL, new ConfigCacheEntry(null));
 
         return null;
     }

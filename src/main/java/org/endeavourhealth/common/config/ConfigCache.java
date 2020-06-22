@@ -7,10 +7,12 @@ import org.endeavourhealth.common.config.models.ConfigCacheEntry;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class ConfigCache implements ICache {
-	private static Map<String, ConfigCacheEntry> _configCache = new HashMap<>();
-	static int TIMEOUT = 60;
+	private final static int TIMEOUT = 60;
+
+	private static Map<String, ConfigCacheEntry> _configCache = new ConcurrentHashMap<>();
 
 	@Override
 	public String getName() {
@@ -41,6 +43,6 @@ public class ConfigCache implements ICache {
 	}
 
 	private boolean isExpired(ConfigCacheEntry cacheEntry) {
-		return  new Date().getTime() > DateUtils.addSeconds(cacheEntry.getCreateTime(), TIMEOUT).getTime();
+		return new Date().getTime() > DateUtils.addSeconds(cacheEntry.getCreateTime(), TIMEOUT).getTime();
 	}
 }

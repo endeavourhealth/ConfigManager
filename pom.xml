@@ -4,7 +4,7 @@
 
   <groupId>org.endeavourhealth.configmanager</groupId>
   <artifactId>configmanager</artifactId>
-  <version>1.31-SNAPSHOT</version>
+  <version>1.32-SNAPSHOT</version>
   <packaging>jar</packaging>
 
   <properties>

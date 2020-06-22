@@ -7,6 +7,7 @@ public class ConfigCacheEntry {
 	private Date createTime;
 
 	public ConfigCacheEntry() {}
+
 	public ConfigCacheEntry(String configData) {
 		this.configData = configData;
 		this.createTime = new Date();
