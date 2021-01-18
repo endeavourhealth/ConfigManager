@@ -44,6 +44,16 @@ public class ConfigManager {
     }
 
     public synchronized static void initialize(String appId, String appSubId) throws ConfigManagerException {
+
+        //catch this being called again, which is a bad thing, or called again with a different appId, which is a very bad thing
+        if (_appId != null) {
+            if (appId.equals(_appId)) {
+                LOG.warn("ConfigManager being initialised with appID [" + appId + "] more than once. This should only be called once, on application startup");
+            } else if (!appId.equals(_appId)) {
+                throw new ConfigManagerException("ConfigManager being initialised multiple times with different appIDs [" + _appId + "], [" + appId + "]. This should only be called once, on application startup");
+            }
+        }
+
         _appId = appId;
         _appSubId = appSubId;
 

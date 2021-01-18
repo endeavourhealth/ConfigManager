@@ -6,4 +6,8 @@ public class ConfigManagerException extends Exception {
 	public ConfigManagerException(String message, Exception exception) {
 		super(message, exception);
 	}
+
+	public ConfigManagerException(String message) {
+		super(message);
+	}
 }
